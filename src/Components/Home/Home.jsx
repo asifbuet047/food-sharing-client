@@ -9,7 +9,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function Home() {
   const instance = useAxios();
-  const [featuredFoods, setFeaturedFoods] = useState(null);
   const queryClient = useQueryClient();
 
   // useEffect(() => {
