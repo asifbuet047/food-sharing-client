@@ -6,13 +6,16 @@ import AuthenticationContextProvider from './Contexts/AuthenticationContextProvi
 import { ToastContainer } from 'react-toastify'
 import { RouterProvider } from 'react-router-dom'
 import routes from './Routes/Routes.jsx'
+import { ChakraProvider } from '@chakra-ui/react'
 
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthenticationContextProvider>
-      <RouterProvider router={routes}></RouterProvider>
+      <ChakraProvider>
+        <RouterProvider router={routes}></RouterProvider>
+      </ChakraProvider>
     </AuthenticationContextProvider>
     <ToastContainer></ToastContainer>
   </React.StrictMode>,

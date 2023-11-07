@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
+import ThreeCircleLoading from '../Loading/BeatLoading';
 
 
 function SignInPage() {
@@ -21,15 +22,18 @@ function SignInPage() {
       .then((user) => {
         const mail = user.user.email;
         const uid = user.user.uid;
+        console.log(user);
         axiosHook.post('/api/v1/token', { mail, uid })
           .then((response) => {
-            console.log(response);
             toast.success(`Successfully Logged In. Welcome`, {
               position: 'bottom-center',
               autoClose: 2000,
             });
           }).catch((error) => {
-            console.log(error);
+            toast.error(`Something wrong`, {
+              position: 'bottom-center',
+              autoClose: 2000,
+            });
           })
 
         if (location.state === null) {
@@ -78,9 +82,9 @@ function SignInPage() {
             </form>
           </div>
         </div>
-        : <span></span>
+        : <ThreeCircleLoading circleSize={55}></ThreeCircleLoading>
       }
-    </div>
+    </div >
   )
 }
 

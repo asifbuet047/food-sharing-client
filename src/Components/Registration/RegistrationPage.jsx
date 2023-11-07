@@ -2,22 +2,21 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AuthenticationContext } from '../../Contexts/AuthenticationContext';
 import { useContext } from 'react';
-import { isCapitalLetterPresentInPassword, isPasswordLengthEnough, isSpecialCharacterPresentInPassword } from '../../PasswordValidator/PasswordValidator'
-import useAxios from '../../hooks/useAxios';
+import { isCapitalLetterPresentInPassword, isPasswordLengthEnough, isSpecialCharacterPresentInPassword } from '../../Utilities/Utilities'
+import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 
 function RegistrationPage() {
     const { createNewUser, signInWithGoogleAccount } = useContext(AuthenticationContext);
     const navigate = useNavigate();
     const location = useLocation();
-    const axiosHook = useAxios();
+    const axiosHook = useAxiosSecure();
 
     const handleGoogleSignIn = (event) => {
         signInWithGoogleAccount()
             .then((result) => {
-                
                 toast.success(`Registration successfully completed. Welcome ${result.email}`, {
                     position: 'bottom-right',
                     autoClose: '2000',
@@ -50,6 +49,7 @@ function RegistrationPage() {
                 if (isPasswordLengthEnough(password)) {
                     createNewUser(mail, password)
                         .then((user) => {
+                            console.log(user);
                             toast.success(`Registration successfully completed. Welcome ${user.email}`, {
                                 position: 'bottom-right',
                                 autoClose: '2000',
@@ -143,22 +143,10 @@ function RegistrationPage() {
                     </div>
                     <div className='flex flex-col justify-center items-center'>
                         <h1>Allready have account?</h1>
-                        <Link to={'/login'}><h1 className='text-green-600'>Login</h1></Link>
+                        <Link to={'/signin'}><h1 className='text-green-600'>Login</h1></Link>
                     </div>
                 </form>
             </div>
-            {/* <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss={false}
-                draggable={false}
-                pauseOnHover={false}
-                theme="light"
-            /> */}
         </div>
     )
 }

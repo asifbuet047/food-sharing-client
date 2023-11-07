@@ -3,6 +3,7 @@ import Root from "../Root";
 import Error from "../Components/Error/Error";
 import Home from "../Components/Home/Home";
 import SignInPage from "../Components/SignIn/SignInPage";
+import RegistrationPage from "../Components/Registration/RegistrationPage";
 
 
 const routes = createBrowserRouter([
@@ -32,6 +33,10 @@ const routes = createBrowserRouter([
             {
                 path: '/signin',
                 element: <SignInPage></SignInPage>
+            },
+            {
+                path: '/register',
+                element: <RegistrationPage></RegistrationPage>
             }
         ]
     }

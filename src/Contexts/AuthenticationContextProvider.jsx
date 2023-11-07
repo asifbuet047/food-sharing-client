@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, updateEmail, updatePassword, signOut, signInWithPopup } from "firebase/auth";
-import { auth, googleAuth } from "../../.firebase.config";
+import { googleAuth, auth } from "../../.firebase.config";
+
 
 export const AuthenticationContext = createContext();
 
@@ -38,6 +39,7 @@ function AuthenticationContextProvider({ children }) {
     useEffect(() => {
         const userObserver = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
+                console.log(currentUser);
                 setUser(currentUser);
                 setUserLoading(false);
             } else {
