@@ -25,3 +25,7 @@ export function isPasswordLengthEnough(password) {
     }
 };
 
+export function getProjectName() {
+    return 'Community Food Sharing';
+}
+
