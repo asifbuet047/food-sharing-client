@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider'
 import { PiSignInFill, PiSignOutFill } from 'react-icons/pi'
-import { Dropdown } from 'flowbite-react';
+import { Avatar, Dropdown } from 'flowbite-react';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 
@@ -25,8 +25,6 @@ function SignedinButton() {
                         <Dropdown.Item icon={PiSignInFill} onClick={() => { handleSignIn() }}> Sign In</Dropdown.Item>
                     </Dropdown> :
                     <Dropdown label={user.displayName ? user.displayName : user.email}>
-                        <Dropdown.Divider />
-                        <Dropdown.Item>{user.displayName ? user.displayName : user.email}</Dropdown.Item>
                         <Dropdown.Divider />
                         <Dropdown.Item icon={PiSignOutFill} onClick={() => { handleSignOut() }}><span className='font-bold'>Sign Out</span></Dropdown.Item>
                     </Dropdown>

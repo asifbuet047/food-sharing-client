@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react'
 
 
@@ -10,4 +11,4 @@ function useAxios() {
     return instance;
 }
 
-export default useAxios
+export default useAxios;
