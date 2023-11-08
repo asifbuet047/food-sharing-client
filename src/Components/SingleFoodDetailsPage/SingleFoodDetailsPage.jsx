@@ -5,6 +5,7 @@ import ThreeCircleLoading from '../Loading/BeatLoading';
 import { Avatar, Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react';
 import { getCurrentDate } from '../../Utilities/Utilities';
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
+import { toast } from 'react-toastify';
 
 function SingleFoodDetailsPage() {
     const { user } = useContext(AuthenticationContext);
@@ -29,7 +30,22 @@ function SingleFoodDetailsPage() {
     }, []);
 
     const handleRequest = () => {
-        console.log("Handle request");
+        console.log("Requested");
+        instance.post('/requestfood', {
+            requested_user_email: user?.email,
+            food_id: food.food_id,
+            note: note,
+            donation: donation
+        }).then((response) => {
+            console.log(response);
+            setOpenModal(false);
+            toast.success(`Successfully Requted`, {
+                position: 'bottom-center',
+                autoClose: 2000,
+            });
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     return (
@@ -115,7 +131,7 @@ function SingleFoodDetailsPage() {
 
 
                                             <div className="w-full">
-                                                <Button pill><span>Request</span></Button>
+                                                <Button pill onClick={handleRequest}><span>Request</span></Button>
                                             </div>
 
                                         </div>
