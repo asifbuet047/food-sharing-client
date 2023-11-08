@@ -39,7 +39,6 @@ function AuthenticationContextProvider({ children }) {
     useEffect(() => {
         const userObserver = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
-                console.log(currentUser);
                 setUser(currentUser);
                 setUserLoading(false);
             } else {

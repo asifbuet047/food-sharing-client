@@ -1,26 +1,17 @@
 import { Button } from 'flowbite-react';
 import useAxios from '../../Hooks/useAxios'
 import ThreeCircleLoading from "../Loading/BeatLoading";
+import HorizontalBarLoading from '../Loading/HorizontalBarLoading';
 import FeaturedFoodContainer from "./FeaturedFoodContainer/FeaturedFoodContainer";
 import { useEffect, useState } from "react";
 import { NavLink } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import NoFoodPage from '../Miscellaneous/NoFoodPage';
 
 
 function Home() {
   const instance = useAxios();
   const queryClient = useQueryClient();
-
-  // useEffect(() => {
-  //   instance.get('/featuredfoods').then((response) => {
-  //     console.log(response);
-  //     setFeaturedFoods(response.data);
-  //   }).catch((error) => {
-  //     console.log(error);
-  //   }).finally(() => {
-  //     console.log("Finally");
-  //   })
-  // }, []);
 
 
   const { isPending, error, data, isFetching, isSuccess } = useQuery({
@@ -40,7 +31,13 @@ function Home() {
       <div className='border-2 rounded-lg border-green-600 mt-5 mb-5'>
         {
           isSuccess ?
-            <FeaturedFoodContainer data={data}></FeaturedFoodContainer>
+            <div>
+              {
+                data.length > 0 ?
+                  <FeaturedFoodContainer data={data}></FeaturedFoodContainer>
+                  : <NoFoodPage></NoFoodPage>
+              }
+            </div>
             : <ThreeCircleLoading circleSize={'5em'}></ThreeCircleLoading>
         }
       </div>
@@ -48,8 +45,8 @@ function Home() {
         {
           isSuccess ?
             <NavLink to={'/availablefoods'}><Button color='success' pill size='xl'>Show All</Button></NavLink>
-            :
-            <ThreeCircleLoading circleSize={'5em'}></ThreeCircleLoading>
+            : <HorizontalBarLoading length={200}></HorizontalBarLoading>
+
         }
       </div>
 

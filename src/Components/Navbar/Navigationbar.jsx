@@ -10,7 +10,7 @@ import { Dropdown } from 'flowbite-react';
 function Navigationbar() {
   const { userLoading, user } = useContext(AuthenticationContext);
   return (
-    <Navbar fluid rounded>
+    <Navbar fluid rounded className='w-full'>
       <Navbar.Brand href="/">
         <FaPeopleRoof size={'3em'}></FaPeopleRoof>
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Community Foods</span>
@@ -20,7 +20,7 @@ function Navigationbar() {
           arrowIcon={false}
           inline
           label={
-            <Avatar alt="User settings" img={user?.photoURL} rounded />
+            <Avatar alt="" img={user?.photoURL} rounded />
           }
         >
           <Dropdown.Header>
@@ -32,14 +32,14 @@ function Navigationbar() {
           <Dropdown.Divider />
           <SignedinButton></SignedinButton>
         </Dropdown>
-      </div>s
+      </div>
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Navbar.Link href="/">Home</Navbar.Link>
         <Navbar.Link href="/availablefoods">Available Foods</Navbar.Link>
         <Navbar.Link href="/addfood">Add Food</Navbar.Link>
         <Navbar.Link href="/managefoods">Manage My Foods</Navbar.Link>
-        <Navbar.Link href="#">Join Us</Navbar.Link>
+        <Navbar.Link href="#">My Food Request</Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   )
