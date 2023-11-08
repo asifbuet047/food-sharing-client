@@ -2,6 +2,7 @@ import { Avatar, Button } from 'flowbite-react';
 import React from 'react'
 import { HiOutlineArrowRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
+import { convertDate } from '../../../../Utilities/Utilities';
 
 function AvailableFoodsCard({ data }) {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ function AvailableFoodsCard({ data }) {
                 <h2 className="card-title">{food_name}</h2>
                 <h2>Quantity: {food_quantity}</h2>
                 <h2>Pickup location: {pickup_location}</h2>
-                <h2>Expire Date: {expiry_date}</h2>
+                <h2>Expire Date: {convertDate(parseInt(expiry_date))}</h2>
                 <Avatar img={donator_image} rounded></Avatar>
                 <h2 className="card-title">{donator_name}</h2>
                 <div className="card-actions justify-center">

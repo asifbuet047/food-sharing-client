@@ -5,11 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 function FeaturedFoodCard({ data }) {
     const navigate = useNavigate();
-    const { food_image, food_name, donator_name, donator_image, food_quantity, pickup_location, food_id } = data;
-
+    const { food_image, food_name, donator_name, donator_image, food_quantity, pickup_location, _id } = data;
     const handleFoodDetails = () => {
-        console.log(food_id);
-        navigate(`/food/${food_id}`);
+        navigate(`/food/${_id}`);
     };
 
     return (

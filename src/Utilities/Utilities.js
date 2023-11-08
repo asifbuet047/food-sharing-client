@@ -39,3 +39,11 @@ export function getCurrentDate() {
     return formattedDate;
 }
 
+export function convertDate(epochTime) {
+    const date = new Date(epochTime * 1000); // Multiply by 1000 to convert from seconds to milliseconds
+    const day = String(date.getDate()).padStart(2, '0'); // Ensure two digits with leading zero
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+

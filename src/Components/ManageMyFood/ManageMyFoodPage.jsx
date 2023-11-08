@@ -173,7 +173,7 @@ function ManageMyFoodPage() {
                                             <Modal.Header />
                                             <Modal.Body>
                                                 <div className="text-center">
-                                                    <Player autoplay loop src={'./bin.json'} style={{ height: '200px', width: '200px' }}></Player>
+                                                    <Player autoplay loop src={'/assets/bin.json'} style={{ height: '200px', width: '200px' }}></Player>
                                                     <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                                                         Are you sure you want to delete this food?
                                                     </h3>
@@ -192,7 +192,7 @@ function ManageMyFoodPage() {
                                             <Modal.Header />
                                             <Modal.Body>
                                                 <div className="text-center">
-                                                    <Player autoplay loop src={'./update.json'} style={{ height: '200px', width: '200px' }}></Player>
+                                                    <Player autoplay loop src={'/assets/update.json'} style={{ height: '200px', width: '200px' }}></Player>
                                                     <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                                                         Are you sure you want to update this food?
                                                     </h3>
