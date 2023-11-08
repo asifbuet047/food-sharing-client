@@ -6,6 +6,7 @@ import ThreeCircleLoading from '../Loading/BeatLoading';
 import { Button, Modal } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { toast } from 'react-toastify';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 
 function MyFoodTable() {
@@ -62,7 +63,7 @@ function MyFoodTable() {
     if (foods) {
         data = foods.map((food, index) => {
             const { food_id, food_name, food_quantity, expiry_date, food_status } = food;
-            const data = { food_id, food_name, food_quantity, expiry_date, food_status, delete: `Delete`, update: `Update` };
+            const data = { food_id, food_name, food_quantity, expiry_date, food_status, delete: `Delete`, update: `Update`, manage: `Manage?` };
             return data;
         });
     }
@@ -89,12 +90,16 @@ function MyFoodTable() {
                 accessor: 'food_status',
             },
             {
-                Header: 'Delete',
+                Header: 'Delete?',
                 accessor: 'delete',
             },
             {
-                Header: 'Update',
+                Header: 'Update?',
                 accessor: 'update',
+            },
+            {
+                Header: 'Manage?',
+                accessor: 'manage',
             }
         ], []);
 
@@ -137,9 +142,10 @@ function MyFoodTable() {
                         </tbody>
                         <Modal show={deleteModal} size="md" onClose={() => setDeleteModal(false)} popup>
                             <Modal.Header />
+
                             <Modal.Body>
                                 <div className="text-center">
-                                    <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                                    <Player autoplay loop src={'./bin.json'} style={{ height: '200px', width: '200px' }}></Player>
                                     <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                                         Are you sure you want to delete this food?
                                     </h3>
@@ -158,7 +164,7 @@ function MyFoodTable() {
                             <Modal.Header />
                             <Modal.Body>
                                 <div className="text-center">
-                                    <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                                    <Player autoplay loop src={'./update.json'} style={{ height: '200px', width: '200px' }}></Player>
                                     <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                                         Are you sure you want to update this food?
                                     </h3>
