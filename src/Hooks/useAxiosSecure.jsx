@@ -1,8 +1,8 @@
 import axios from 'axios'
 
+//dont use timeout it cause cors error
 const instance = axios.create({
     baseURL: 'http://localhost:5000/',
-    timeout: 5000,
     withCredentials: true
 });
 

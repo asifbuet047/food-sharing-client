@@ -5,6 +5,8 @@ import Home from "../Components/Home/Home";
 import SignInPage from "../Components/SignIn/SignInPage";
 import RegistrationPage from "../Components/Registration/RegistrationPage";
 import AvailableFoods from "../Components/AvailableFoods/AvailableFoods";
+import SingleFoodDetailsPage from "../Components/SingleFoodDetailsPage/SingleFoodDetailsPage";
+import PrivateRoute from "./PrivateRoute";
 
 
 const routes = createBrowserRouter([
@@ -23,6 +25,11 @@ const routes = createBrowserRouter([
                 element: <AvailableFoods></AvailableFoods>,
                 errorElement: <Error></Error>
 
+            },
+            {
+                path: '/food/:id',
+                element: <PrivateRoute><SingleFoodDetailsPage></SingleFoodDetailsPage></PrivateRoute>,
+                errorElement: <Error></Error>
             },
             {
                 path: '/addfood',

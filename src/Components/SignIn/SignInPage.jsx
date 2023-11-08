@@ -8,7 +8,7 @@ import ThreeCircleLoading from '../Loading/BeatLoading';
 
 
 function SignInPage() {
-  const { userLoading, signInUser } = useContext(AuthenticationContext);
+  const { userLoading, signInUser, signOutUser } = useContext(AuthenticationContext);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosHook = useAxiosSecure();
@@ -22,15 +22,18 @@ function SignInPage() {
       .then((user) => {
         const mail = user.user.email;
         const uid = user.user.uid;
-        console.log(user);
+        console.log(mail, uid);
         axiosHook.post('/api/v1/token', { mail, uid })
           .then((response) => {
+            console.log(response);
             toast.success(`Successfully Logged In. Welcome`, {
               position: 'bottom-center',
               autoClose: 2000,
             });
           }).catch((error) => {
-            toast.error(`Something wrong`, {
+            signOutUser();
+            console.log(error);
+            toast.error(`Something wrong ${error}`, {
               position: 'bottom-center',
               autoClose: 2000,
             });
