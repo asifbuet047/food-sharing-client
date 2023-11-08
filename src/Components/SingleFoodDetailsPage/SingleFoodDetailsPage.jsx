@@ -28,19 +28,20 @@ function SingleFoodDetailsPage() {
     }, []);
 
     const handleRequest = () => {
-        console.log("Requested");
         instance.post('/requestfood', {
             requested_user_email: user?.email,
             food_id: food._id,
+            request_date: Math.floor(Date.now() / 1000),
             note: note,
-            donation: donation
+            donation: parseInt(donation)
         }).then((response) => {
-            console.log(response);
-            setOpenModal(false);
-            toast.success(`Successfully Requted`, {
-                position: 'bottom-center',
-                autoClose: 2000,
-            });
+            if (response.data.acknowledged) {
+                setOpenModal(false);
+                toast.success(`Successfully Requested`, {
+                    position: 'bottom-center',
+                    autoClose: 2000,
+                });
+            }
         }).catch((error) => {
             console.log(error);
         });
@@ -105,7 +106,7 @@ function SingleFoodDetailsPage() {
                                                     <div className="mb-2 block">
                                                         <Label htmlFor="expire" value="Expiry date" />
                                                     </div>
-                                                    <TextInput id="expire" value={convertDate(parseInt(food.expiry_date))} readOnly />
+                                                    <TextInput id="expire" value={getCurrentDate(parseInt(food.expiry_date))} readOnly />
                                                 </div>
                                                 <div>
                                                     <div className="mb-2 block">
