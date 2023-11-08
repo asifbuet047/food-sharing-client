@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import useAxios from '../../Hooks/useAxios';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 import AvailableFoodsContainer from './AvailableFoodsContainer/AvailableFoodsContainer';
 import { Pagination } from 'flowbite-react';
 import ThreeCircleLoading from '../Loading/BeatLoading'
@@ -11,17 +11,17 @@ function AvailableFoods() {
     const [currentPage, setCurrentPage] = useState(1);
 
     const onPageChange = (page) => {
-        console.log(page);
         setCurrentPage(page);
     };
 
     const { isPending, error, data, isFetching, isSuccess } = useQuery({
-        queryKey: ['available_foods'],
+        queryKey: ['available_foods', currentPage],
         queryFn: async () => {
-            const res = await instance.get('/availablefoods');
+            const res = await instance.get(`/availablefoods?page=${currentPage}&limit=10`);
             console.log(res.data);
             return res.data;
         },
+        placeholderData: keepPreviousData,
     });
 
 
@@ -33,7 +33,7 @@ function AvailableFoods() {
             <div className='border-2 rounded-lg border-green-600 mt-5 mb-5'>
                 {
                     isSuccess ?
-                        <AvailableFoodsContainer data={data}></AvailableFoodsContainer>
+                        <AvailableFoodsContainer data={data.available_foods}></AvailableFoodsContainer>
                         : <ThreeCircleLoading circleSize={'5em'}></ThreeCircleLoading>
                 }
             </div>
@@ -41,7 +41,7 @@ function AvailableFoods() {
                 {
                     isSuccess ?
                         <div className="flex overflow-x-auto sm:justify-center">
-                            <Pagination currentPage={currentPage} totalPages={data.length/5} onPageChange={onPageChange} />
+                            <Pagination currentPage={currentPage} totalPages={Math.ceil(data['totalCount'] / 10)} onPageChange={onPageChange} />
                         </div>
                         :
                         <ThreeCircleLoading circleSize={'5em'}></ThreeCircleLoading>
