@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
 import { AuthenticationContext } from '../Contexts/AuthenticationContextProvider';
+import ThreeCircleLoading from '../Components/Loading/BeatLoading';
 
 function PrivateRoute({ children }) {
     const { user, userLoading } = useContext(AuthenticationContext);
@@ -9,7 +10,7 @@ function PrivateRoute({ children }) {
     console.log(userLoading);
 
     if (userLoading) {
-        return <BeatLoader color='#36D7B7' margin={10} size={50}></BeatLoader>;
+        return <ThreeCircleLoading circleSize={'15em'}></ThreeCircleLoading>;
     }
 
 

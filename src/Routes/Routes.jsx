@@ -8,6 +8,8 @@ import AvailableFoods from "../Components/AvailableFoods/AvailableFoods";
 import SingleFoodDetailsPage from "../Components/SingleFoodDetailsPage/SingleFoodDetailsPage";
 import PrivateRoute from "./PrivateRoute";
 import AddFoodPage from "../Components/AddFood/AddFoodPage";
+import ManageMyFoodPage from "../Components/ManageMyFood/ManageMyFoodPage";
+import MyFoodTable from "../Components/Miscellaneous/MyFoodTable";
 
 
 const routes = createBrowserRouter([
@@ -38,7 +40,9 @@ const routes = createBrowserRouter([
                 errorElement: <Error></Error>
             },
             {
-                path: '/managefood',
+                path: '/managefoods',
+                element: <PrivateRoute><MyFoodTable></MyFoodTable></PrivateRoute>,
+                errorElement: <Error></Error>
             },
             {
                 path: '/requestfood',

@@ -38,7 +38,7 @@ function Navigationbar() {
         <Navbar.Link href="/">Home</Navbar.Link>
         <Navbar.Link href="/availablefoods">Available Foods</Navbar.Link>
         <Navbar.Link href="/addfood">Add Food</Navbar.Link>
-        <Navbar.Link href="#">Manage My Foods</Navbar.Link>
+        <Navbar.Link href="/managefoods">Manage My Foods</Navbar.Link>
         <Navbar.Link href="#">Join Us</Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
