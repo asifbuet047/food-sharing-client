@@ -39,7 +39,7 @@ function Navigationbar() {
         <Navbar.Link href="/availablefoods">Available Foods</Navbar.Link>
         <Navbar.Link href="/addfood">Add Food</Navbar.Link>
         <Navbar.Link href="/managefoods">Manage My Foods</Navbar.Link>
-        <Navbar.Link href="#">My Food Request</Navbar.Link>
+        <Navbar.Link href="/foodrequest">My Food Request</Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   )

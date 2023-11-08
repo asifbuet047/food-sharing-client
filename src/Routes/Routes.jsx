@@ -9,42 +9,45 @@ import SingleFoodDetailsPage from "../Components/SingleFoodDetailsPage/SingleFoo
 import PrivateRoute from "./PrivateRoute";
 import AddFoodPage from "../Components/AddFood/AddFoodPage";
 import ManageMyFoodPage from "../Components/ManageMyFood/ManageMyFoodPage";
+import PageNotFound from '../Components/Error/PageNotFound';
+import NoFoodPage from "../Components/Miscellaneous/NoFoodPage";
 
 
 const routes = createBrowserRouter([
     {
         path: '/',
         element: <Root></Root>,
-        errorElement: <Error></Error>,
+        errorElement: <PageNotFound></PageNotFound>,
         children: [
             {
                 path: '/',
                 element: <Home></Home>,
-                errorElement: <Error></Error>,
             },
             {
                 path: '/availablefoods',
                 element: <AvailableFoods></AvailableFoods>,
-                errorElement: <Error></Error>
+                errorElement: <PageNotFound></PageNotFound>,
 
             },
             {
                 path: '/food/:id',
                 element: <PrivateRoute><SingleFoodDetailsPage></SingleFoodDetailsPage></PrivateRoute>,
-                errorElement: <Error></Error>
+                errorElement: <PageNotFound></PageNotFound>
             },
             {
                 path: '/addfood',
                 element: <PrivateRoute><AddFoodPage></AddFoodPage></PrivateRoute>,
-                errorElement: <Error></Error>
+                errorElement: <PageNotFound></PageNotFound>
             },
             {
                 path: '/managefoods',
                 element: <PrivateRoute><ManageMyFoodPage></ManageMyFoodPage></PrivateRoute>,
-                errorElement: <Error></Error>
+                errorElement: <PageNotFound></PageNotFound>
             },
             {
                 path: '/foodrequest',
+                element: <></>,
+                errorElement: <PageNotFound></PageNotFound>
             },
             {
                 path: '/requestfood',
