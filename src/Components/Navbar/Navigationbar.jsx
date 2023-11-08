@@ -32,12 +32,12 @@ function Navigationbar() {
           <Dropdown.Divider />
           <SignedinButton></SignedinButton>
         </Dropdown>
-      </div>
+      </div>s
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Navbar.Link href="/">Home</Navbar.Link>
         <Navbar.Link href="/availablefoods">Available Foods</Navbar.Link>
-        <Navbar.Link href="#">Add Food</Navbar.Link>
+        <Navbar.Link href="/addfood">Add Food</Navbar.Link>
         <Navbar.Link href="#">Manage My Foods</Navbar.Link>
         <Navbar.Link href="#">Join Us</Navbar.Link>
       </Navbar.Collapse>
