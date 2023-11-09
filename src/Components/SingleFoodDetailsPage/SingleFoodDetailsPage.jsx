@@ -15,6 +15,9 @@ function SingleFoodDetailsPage() {
     const [openModal, setOpenModal] = useState(false);
     const [note, setNote] = useState(null);
     const [donation, setDonation] = useState(0);
+    const [username, setUsername] = useState(null);
+    const [userphoto, setUserphoto] = useState(null);
+    const [currentDate, setCurrentDate] = useState(null);
     const navigate = useNavigate();
 
     function onCloseModal() {
@@ -39,16 +42,23 @@ function SingleFoodDetailsPage() {
 
     const handleRequest = () => {
         setOpenModal(false);
+        console.log(username, userphoto);
         instance.get(`/requestedfood?mail=${user.email}`).then((response) => {
             const similar = response.data.find((value) => value.food_id == food._id);
+            console.log(similar);
             if (!similar) {
-                instance.post('/requestfood', {
+                const data = {
+                    requested_user_name: username,
                     requested_user_email: user?.email,
+                    requested_user_photo: userphoto,
                     food_id: food._id,
                     request_date: Math.floor(Date.now() / 1000),
                     note: note ? note : user?.email,
                     donation: parseInt(donation)
-                }).then((response) => {
+                };
+                console.log(data);
+                instance.post('/requestfood', { data }).then((response) => {
+                    console.log(response);
                     if (response.data.acknowledged) {
                         navigate('/');
                         toast.success(`Successfully Requested`, {
@@ -138,25 +148,25 @@ function SingleFoodDetailsPage() {
                                                     <div className="mb-2 block">
                                                         <Label htmlFor="user" value="Requester Mail" />
                                                     </div>
-                                                    <TextInput id="user" value={user?.email} readOnly />
+                                                    <TextInput id="usermail" value={user.email} readOnly />
                                                 </div>
                                                 <div>
                                                     <div className="mb-2 block">
                                                         <Label htmlFor="user" value="Requester Name" />
                                                     </div>
-                                                    <TextInput id="user" value={user.displayName ? user.displayName : user.email} required />
+                                                    <TextInput id="username" placeholder={user.displayName ? user.displayName : user.email} onChange={(event) => { setUsername(event.target.value) }} />
                                                 </div>
                                                 <div>
                                                     <div className="mb-2 block">
                                                         <Label htmlFor="user" value="Requester Profile Picture Link" />
                                                     </div>
-                                                    <TextInput id="user" value={user.photoURL ? user.photoURL : `https://i.ibb.co/H7ZyRMf/avatar.png`} required />
+                                                    <TextInput id="userphoto" placeholder={user.photoURL ? user.photoURL : `https://i.ibb.co/H7ZyRMf/avatar.png`} onChange={(event) => { setUserphoto(event.target.value) }} />
                                                 </div>
                                                 <div>
                                                     <div className="mb-2 block">
                                                         <Label htmlFor="current" value="Current date" />
                                                     </div>
-                                                    <TextInput id="current" value={getCurrentDate()} readOnly />
+                                                    <TextInput id="current" value={getCurrentDate()} onChange={(event) => { setCurrentDate(event.target.value) }} readOnly />
                                                 </div>
 
                                                 <div className="mb-2 block">

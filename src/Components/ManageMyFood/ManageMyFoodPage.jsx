@@ -68,11 +68,18 @@ function ManageMyFoodPage() {
         setUpdateModal(false);
     };
 
+
     let data = [];
     if (foods) {
         data = foods.map((food, index) => {
-            const { food_id, food_name, food_quantity, expiry_date, food_status } = food;
-            const data = { food_id, food_name, food_quantity, expiry_date, food_status, delete: `Delete`, update: `Update`, manage: `Manage` };
+            let { _id, food_name, food_quantity, expiry_date, food_status } = food;
+            let status;
+            if (food_status) {
+                status = 'Available';
+            } else {
+                status = "Delivered";
+            }
+            const data = { _id, food_name, food_quantity, expiry_date, status, delete: `Delete`, update: `Update`, manage: `Manage` };
             return data;
         });
     }
@@ -80,7 +87,7 @@ function ManageMyFoodPage() {
         () => [
             {
                 Header: 'Food id',
-                accessor: 'food_id',
+                accessor: '_id',
             },
             {
                 Header: 'Food name',
@@ -96,7 +103,7 @@ function ManageMyFoodPage() {
             },
             {
                 Header: 'Status',
-                accessor: 'food_status',
+                accessor: 'status',
             },
             {
                 Header: 'Delete?',
@@ -157,7 +164,14 @@ function ManageMyFoodPage() {
                                                                             {
                                                                                 colIndex == 5 || colIndex == 6 || colIndex == 7 ?
                                                                                     <Button onClick={() => { handleClick(rowIndex, colIndex) }}>{cell.render('Cell')}</Button>
-                                                                                    : <span className='text-black font-bold text-center text-xs md:text-base lg:text-lg' onClick={() => { handleClick(rowIndex, colIndex) }}>{cell.render('Cell')}</span>
+                                                                                    :
+                                                                                    <span>
+                                                                                        {
+                                                                                            colIndex == 4 ?
+                                                                                                <span className='text-black font-bold text-center text-xs md:text-base lg:text-lg' onClick={() => { handleClick(rowIndex, colIndex) }}>{cell.render('Cell')}</span>
+                                                                                                : <span className='text-black font-bold text-center text-xs md:text-base lg:text-lg' onClick={() => { handleClick(rowIndex, colIndex) }}>{cell.render('Cell')}</span>
+                                                                                        }
+                                                                                    </span>
 
                                                                             }
                                                                         </td>
