@@ -6,13 +6,13 @@ import { Avatar, Button, Dropdown } from 'flowbite-react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import { convertDateToEpoch } from '../../Utilities/Utilities';
-import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 function AddFoodPage() {
-    const { user } = useContext(AuthenticationContext);
-    const [value, setValue] = useState('1');
+    const { user, signOutUser } = useContext(AuthenticationContext);
     const instance = useAxiosSecure();
     const [update, setUpdate] = useState(false);
+    const navigate = useNavigate();
 
 
     const handleAddFood = (event) => {
@@ -23,7 +23,6 @@ function AddFoodPage() {
         const quantity = formData.get('quantity');
         const location = formData.get('location');
         const expire = formData.get('expire');
-        const status = formData.get('status');
         const donatorName = formData.get('donatorName');
         const donatorMail = formData.get('donatorMail');
         const donatorImage = formData.get('donatorImage');
@@ -37,7 +36,7 @@ function AddFoodPage() {
             food_quantity: quantity,
             pickup_location: location,
             expiry_date: convertDateToEpoch(expire),
-            food_status: status
+            food_status: true
         };
         console.log(newFood);
         instance.post('addfood', newFood).then((response) => {
@@ -49,11 +48,14 @@ function AddFoodPage() {
                 });
             }
         }).catch((error) => {
-            console.log(error);
-            toast.error(`Something wrong Try later`, {
-                position: 'bottom-center',
-                autoClose: 2000
-            });
+            if (error.response.status == 401 || error.response.status == 403) {
+                signOutUser();
+                toast.error(`Invalidate User Please sign in again`, {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                });
+                navigate('/signin');
+            }
         });
 
     }
@@ -90,20 +92,11 @@ function AddFoodPage() {
                                     : <input name='donatorMail' type="text" placeholder={user?.email} className="input input-bordered w-full max-w-xs m-2" />
                             }
 
-                            <div>
-
-                                <RadioGroup onChange={setValue} value={value}>
-                                    <Stack direction='row'>
-                                        <Radio value='1'>Available</Radio>
-                                        <Radio value='2'>Delivered</Radio>
-                                    </Stack>
-                                </RadioGroup>
-
-                            </div>
+                            <input name='status' type="text" value="Available" className="input input-bordered w-full max-w-xs m-2" />
 
                             {
                                 update ? <Button size='xl' outline type='submit' isProcessing>Adding Food</Button>
-                                    : <Button size='xl' outline type='submit' onClick={() => setUpdate(true)} > Add Food</Button>
+                                    : <Button size='xl' outline type='submit'> Add Food</Button>
                             }
 
                         </form>

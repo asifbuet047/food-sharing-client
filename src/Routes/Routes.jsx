@@ -12,6 +12,7 @@ import ManageMyFoodPage from "../Components/ManageMyFood/ManageMyFoodPage";
 import PageNotFound from '../Components/Error/PageNotFound';
 import ManageSingleFoodPage from '../Components/ManageSingleFood/ManageSingleFoodPage'
 import MyFoodRequestPage from "../Components/MyFoodRequest/MyFoodRequestPage";
+import UpdateFoodPage from "../Components/UpdateFood/UpdateFoodPage";
 
 const routes = createBrowserRouter([
     {
@@ -52,6 +53,11 @@ const routes = createBrowserRouter([
             {
                 path: '/requestfoods',
                 element: <PrivateRoute><MyFoodRequestPage></MyFoodRequestPage></PrivateRoute>,
+                errorElement: <PageNotFound></PageNotFound>
+            },
+            {
+                path: '/updatefood/:id',
+                element: <PrivateRoute><UpdateFoodPage></UpdateFoodPage></PrivateRoute>,
                 errorElement: <PageNotFound></PageNotFound>
             },
             {

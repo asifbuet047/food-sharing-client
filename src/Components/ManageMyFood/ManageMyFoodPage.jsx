@@ -48,13 +48,13 @@ function ManageMyFoodPage() {
 
     const handleDeleteFood = () => {
         setDeleteModal(false);
-        const id = data[rowItem]['food_id'];
+        const id = data[rowItem]['_id'];
         instance.post('/deletefood', {
             food_id: id
         }).then((response) => {
-            console.log(response);
+            console.log(response.data);
             if (response.data.acknowledged) {
-                setFoods(null);
+                navigate('/');
                 toast.success(`Successfully Deleted`, {
                     position: 'bottom-center',
                     autoClose: 2000,
@@ -67,6 +67,7 @@ function ManageMyFoodPage() {
 
     const handleUpdateFood = () => {
         setUpdateModal(false);
+        navigate(`/updatefood/${data[rowItem]['_id']}`);
     };
 
 
