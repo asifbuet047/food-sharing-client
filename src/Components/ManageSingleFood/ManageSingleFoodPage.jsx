@@ -1,84 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import React, { useEffect, useState } from 'react'
 import ThreeCircleLoading from '../Loading/BeatLoading';
-import { Avatar, Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react';
-import { convertDate, getCurrentDate } from '../../Utilities/Utilities';
-import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
-import { toast } from 'react-toastify';
+import { Label, Modal, TextInput } from 'flowbite-react';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
-function SingleFoodDetailsPage() {
-    const { user, signOutUser } = useContext(AuthenticationContext);
-    const location = useLocation();
+function ManageSingleFoodPage() {
+    const [requestFood, setRequestFood] = useState(null);
     const instance = useAxiosSecure();
-    const [food, setFood] = useState(null);
-    const [openModal, setOpenModal] = useState(false);
-    const [note, setNote] = useState(null);
-    const [donation, setDonation] = useState(0);
-    const navigate = useNavigate();
-
-    function onCloseModal() {
-        setOpenModal(false);
-        console.log(donation, note);
-    }
 
     useEffect(() => {
-        instance.get(location.pathname).then((response) => {
-            setFood(response.data);
-        }).catch((error) => {
-            if (error.response.status == 401 || error.response.status == 403) {
-                signOutUser();
-                toast.error(`Invalidate User Please sign in again`, {
-                    position: 'bottom-center',
-                    autoClose: 2000,
-                });
-                navigate('/signin');
-            }
-        });
-    }, []);
 
-    const handleRequest = () => {
-        setOpenModal(false);
-        instance.get(`/requestedfood?mail=${user.email}`).then((response) => {
-            const similar = response.data.find((value) => value.food_id == food._id);
-            if (!similar) {
-                instance.post('/requestfood', {
-                    requested_user_email: user?.email,
-                    food_id: food._id,
-                    request_date: Math.floor(Date.now() / 1000),
-                    note: note ? note : user?.email,
-                    donation: parseInt(donation)
-                }).then((response) => {
-                    if (response.data.acknowledged) {
-                        navigate('/');
-                        toast.success(`Successfully Requested`, {
-                            position: 'bottom-center',
-                            autoClose: 2000,
-                        });
-                    }
-                }).catch((error) => {
-                    console.log(error);
-                });
-            } else {
-                toast.success('You already requested this food. No need to request again. Go to My Request Foods for details', {
-                    position: 'bottom-center',
-                    autoClose: 5000,
-                });
-            }
-        }).catch((error) => {
-            toast.error(`Nwtwork error`, {
-                position: 'bottom-right',
-                autoClose: 2000,
-            });
-        });
-    }
+    }, []);
 
     return (
         <div>
             {
-                food ?
+                requestFood ?
                     <div className='w-full flex flex-col justify-center items-center'>
-                        <h1 className='text-black font-bold text-base md:text-xl lg:text-3xl'>Food Details</h1>
+                        <h1 className='text-black font-bold text-base md:text-xl lg:text-3xl'>Manage Single Food</h1>
                         <div className="card w-full lg:w-1/2 bg-base-100 shadow-2xl lg:pt-5 lg:pb-5 lg:pl-2 lg:pr-2 lg:mt-5 lg:mb-5">
                             <figure>
                                 <img src={food.food_image} alt={food.food_name} className='w-full' />
@@ -136,21 +74,9 @@ function SingleFoodDetailsPage() {
                                                 </div>
                                                 <div>
                                                     <div className="mb-2 block">
-                                                        <Label htmlFor="user" value="Requester Mail" />
+                                                        <Label htmlFor="user" value="Request user" />
                                                     </div>
                                                     <TextInput id="user" value={user?.email} readOnly />
-                                                </div>
-                                                <div>
-                                                    <div className="mb-2 block">
-                                                        <Label htmlFor="user" value="Requester Name" />
-                                                    </div>
-                                                    <TextInput id="user" value={user.displayName ? user.displayName : user.email} required />
-                                                </div>
-                                                <div>
-                                                    <div className="mb-2 block">
-                                                        <Label htmlFor="user" value="Requester Profile Picture Link" />
-                                                    </div>
-                                                    <TextInput id="user" value={user.photoURL ? user.photoURL : `https://i.ibb.co/H7ZyRMf/avatar.png`} required />
                                                 </div>
                                                 <div>
                                                     <div className="mb-2 block">
@@ -162,11 +88,12 @@ function SingleFoodDetailsPage() {
                                                 <div className="mb-2 block">
                                                     <Label htmlFor="note" value="Additional note" />
                                                 </div>
-                                                <TextInput id="note" type="text" required placeholder='Write some note' onChange={(event) => { setNote(event.target.value) }} />
+                                                <TextInput id="note" type="text" required onChange={(event) => { setNote(event.target.value) }} />
                                                 <div className="mb-2 block">
                                                     <Label htmlFor="money" value="Donation Money" />
                                                 </div>
-                                                <TextInput id="money" type="number" required placeholder='Donate any amount' onChange={(event) => { setDonation(event.target.value) }} />
+                                                <TextInput id="money" type="text" required onChange={(event) => { setDonation(event.target.value) }} />
+
 
                                                 <div className="w-full">
                                                     <Button pill onClick={handleRequest}><span>Request</span></Button>
@@ -186,4 +113,4 @@ function SingleFoodDetailsPage() {
     )
 }
 
-export default SingleFoodDetailsPage
+export default ManageSingleFoodPage

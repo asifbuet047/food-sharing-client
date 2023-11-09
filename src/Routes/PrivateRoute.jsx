@@ -7,22 +7,23 @@ import ThreeCircleLoading from '../Components/Loading/BeatLoading';
 function PrivateRoute({ children }) {
     const { user, userLoading } = useContext(AuthenticationContext);
     const currentRoute = useLocation();
+
     console.log(user);
     console.log(userLoading);
 
-
     if (userLoading) {
         return <ThreeCircleLoading circleSize={'5em'}></ThreeCircleLoading>;
+    } else {
+        return children;
     }
 
 
+    // if (!userLoading) {
+    //     return <Navigate to={'/signin'}></Navigate>;
+    // }
 
-    if (!userLoading && !user?.email) {
-        return <Navigate to={'/signin'}></Navigate>;
-    }
 
-
-    return children;
+    // return children;
 }
 
 export default PrivateRoute

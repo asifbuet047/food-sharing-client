@@ -9,8 +9,7 @@ const instance = axios.create({
 });
 
 function useAxiosSecure() {
-    const { user } = useContext(AuthenticationContext);
-    console.log(user);
+    
     return instance;
 }
 

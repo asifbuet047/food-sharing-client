@@ -10,8 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import AddFoodPage from "../Components/AddFood/AddFoodPage";
 import ManageMyFoodPage from "../Components/ManageMyFood/ManageMyFoodPage";
 import PageNotFound from '../Components/Error/PageNotFound';
-import NoFoodPage from "../Components/Miscellaneous/NoFoodPage";
-
+import ManageSingleFoodPage from '../Components/ManageSingleFood/ManageSingleFoodPage'
 
 const routes = createBrowserRouter([
     {
@@ -45,8 +44,8 @@ const routes = createBrowserRouter([
                 errorElement: <PageNotFound></PageNotFound>
             },
             {
-                path: '/foodrequest',
-                element: <></>,
+                path: '/manage/:id',
+                element: <PrivateRoute><ManageSingleFoodPage></ManageSingleFoodPage></PrivateRoute>,
                 errorElement: <PageNotFound></PageNotFound>
             },
             {
