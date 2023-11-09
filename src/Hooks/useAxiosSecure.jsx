@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { useContext } from 'react';
+import { AuthenticationContext } from '../Contexts/AuthenticationContextProvider';
 
 //dont use timeout it cause cors error
 const instance = axios.create({
@@ -7,6 +9,8 @@ const instance = axios.create({
 });
 
 function useAxiosSecure() {
+    const { user } = useContext(AuthenticationContext);
+    console.log(user);
     return instance;
 }
 

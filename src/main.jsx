@@ -6,7 +6,7 @@ import AuthenticationContextProvider from './Contexts/AuthenticationContextProvi
 import { ToastContainer } from 'react-toastify'
 import { RouterProvider } from 'react-router-dom'
 import routes from './Routes/Routes.jsx'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const queryClient = new QueryClient();

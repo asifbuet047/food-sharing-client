@@ -47,3 +47,11 @@ export function convertDate(epochTime) {
     return `${day}/${month}/${year}`;
 }
 
+
+export function convertDateToEpoch(dateString) {
+    const [day, month, year] = dateString.split('/').map(Number);
+    const date = new Date(year, month - 1, day); // Months are 0-based, so subtract 1 from the month
+    const epochTime = date.getTime() / 1000; // Convert to seconds
+    return epochTime;
+}
+

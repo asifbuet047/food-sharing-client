@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import ThreeCircleLoading from '../Loading/BeatLoading';
 import { Avatar, Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react';
@@ -8,13 +8,14 @@ import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvi
 import { toast } from 'react-toastify';
 
 function SingleFoodDetailsPage() {
-    const { user } = useContext(AuthenticationContext);
+    const { user, signOutUser } = useContext(AuthenticationContext);
     const location = useLocation();
     const instance = useAxiosSecure();
     const [food, setFood] = useState(null);
     const [openModal, setOpenModal] = useState(false);
     const [note, setNote] = useState('');
     const [donation, setDonation] = useState('');
+    const navigate = useNavigate();
 
     function onCloseModal() {
         setOpenModal(false);
@@ -24,6 +25,11 @@ function SingleFoodDetailsPage() {
     useEffect(() => {
         instance.get(location.pathname).then((response) => {
             setFood(response.data);
+        }).catch((error) => {
+            if (error.response.status == 401 || error.response.status == 403) {
+                signOutUser();
+                navigate('/signin');
+            }
         });
     }, []);
 
@@ -37,6 +43,7 @@ function SingleFoodDetailsPage() {
         }).then((response) => {
             if (response.data.acknowledged) {
                 setOpenModal(false);
+                navigate('/');
                 toast.success(`Successfully Requested`, {
                     position: 'bottom-center',
                     autoClose: 2000,
