@@ -32,7 +32,7 @@ function SingleFoodDetailsPage() {
             if (error.response.status == 401 || error.response.status == 403) {
                 signOutUser();
                 toast.error(`Invalidate User Please sign in again`, {
-                    position: 'bottom-center',
+                    position: 'bottom-right',
                     autoClose: 2000,
                 });
                 navigate('/signin');
@@ -47,7 +47,7 @@ function SingleFoodDetailsPage() {
             const similar = response.data.find((value) => value.food_id == food._id);
             console.log(similar);
             if (!similar) {
-                const data = {
+                instance.post('/requestfood', {
                     requested_user_name: username,
                     requested_user_email: user?.email,
                     requested_user_photo: userphoto,
@@ -55,9 +55,7 @@ function SingleFoodDetailsPage() {
                     request_date: Math.floor(Date.now() / 1000),
                     note: note ? note : user?.email,
                     donation: parseInt(donation)
-                };
-                console.log(data);
-                instance.post('/requestfood', { data }).then((response) => {
+                }).then((response) => {
                     console.log(response);
                     if (response.data.acknowledged) {
                         navigate('/');

@@ -34,6 +34,7 @@ function ManageMyFoodPage() {
     const handleClick = (row, col) => {
         rowItem = row;
         colItem = col;
+        console.log(row);
         if (col == 5) {
             setDeleteModal(true);
         }
@@ -41,7 +42,7 @@ function ManageMyFoodPage() {
             setUpdateModal(true);
         }
         if (col == 7) {
-            navigate(`/manage/`);
+            navigate(`/manage/${foods[row]._id}`);
         }
     };
 
@@ -71,7 +72,7 @@ function ManageMyFoodPage() {
 
     let data = [];
     if (foods) {
-        data = foods.map((food, index) => {
+        data = foods.map((food) => {
             let { _id, food_name, food_quantity, expiry_date, food_status } = food;
             let status;
             if (food_status) {
