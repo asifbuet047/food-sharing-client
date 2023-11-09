@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import useAxiosSecure from '../../Hooks/useAxiosSecure'
+import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
+import { toast } from 'react-toastify';
 import ThreeCircleLoading from '../Loading/BeatLoading';
-import { Label, Modal, TextInput } from 'flowbite-react';
-import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { useLocation } from 'react-router-dom';
-import ManageSingleFoodCard from './ManageSingleFoodCard';
-import NoFoodPage from '../Miscellaneous/NoFoodPage';
+import MyFoodRequestCard from './MyFoodRequestCard';
 
-function ManageSingleFoodPage() {
-    const [requestFoods, setRequestFoods] = useState(null);
-    const location = useLocation();
+function MyFoodRequestPage() {
+    const { user } = useContext(AuthenticationContext);
     const instance = useAxiosSecure();
+    const [foods, setFoods] = useState(null);
+
 
     useEffect(() => {
-        console.log(location.pathname);
-        instance.get(location.pathname).then((response) => {
-            setRequestFoods(response.data);
+        instance.get(`/myfoodrequest?email=${user?.email}`).then((response) => {
+            console.log(response.data);
+            setFoods(response.data);
         }).catch((error) => {
+            console.log(error);
             if (error.response.status == 401 || error.response.status == 403) {
                 signOutUser();
                 toast.error(`Invalidate User Please sign in again`, {
@@ -26,27 +27,25 @@ function ManageSingleFoodPage() {
             }
         });
     }, []);
-
     return (
         <div>
             {
-                requestFoods ?
+                foods ?
                     <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-5'>
                         {
-                            requestFoods.length > 0 ?
-                                requestFoods.map((food, index) => <ManageSingleFoodCard data={food} key={index}></ManageSingleFoodCard>)
+                            foods.length > 0 ?
+                                foods.map((food, index) => <MyFoodRequestCard data={food} key={index}></MyFoodRequestCard>)
                                 :
                                 <div className='flex flex-col justify-center items-center'>
-                                    <h1 className='text-black font-bold text-base md:text-xl lg:text-3xl'>No One request this food yet</h1>
+                                    <h1 className='text-black font-bold text-base md:text-xl lg:text-3xl'>You dont requst any food yet</h1>
                                     <NoFoodPage></NoFoodPage>
                                 </div>
                         }
                     </div>
                     : <ThreeCircleLoading circleSize={'5em'}></ThreeCircleLoading>
             }
-
         </div>
     )
 }
 
-export default ManageSingleFoodPage
+export default MyFoodRequestPage

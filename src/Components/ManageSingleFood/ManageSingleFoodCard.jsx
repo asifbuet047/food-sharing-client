@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { convertDate } from '../../Utilities/Utilities'
 import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { Button } from 'flowbite-react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
 
 function ManageSingleFoodCard({ data }) {
     const [value, setValue] = useState(true);
     const instance = useAxiosSecure();
     const navigate = useNavigate();
+    const { signOutUser } = useContext(AuthenticationContext);
 
 
     const handleStatusUpdate = () => {
@@ -24,7 +26,14 @@ function ManageSingleFoodCard({ data }) {
                 navigate('/managefoods');
             }
         }).catch((error) => {
-            console.log(error);
+            if (error.response.status == 401 || error.response.status == 403) {
+                signOutUser();
+                toast.error(`Invalidate User Please sign in again`, {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                });
+                navigate('/signin');
+            }
         });
     }
 
