@@ -34,7 +34,7 @@ function ManageMyFoodPage() {
     const handleClick = (row, col) => {
         rowItem = row;
         colItem = col;
-        console.log(row);
+        console.log(rowItem);
         if (col == 5) {
             setDeleteModal(true);
         }
@@ -48,26 +48,30 @@ function ManageMyFoodPage() {
 
     const handleDeleteFood = () => {
         setDeleteModal(false);
-        const id = data[rowItem]['_id'];
-        instance.post('/deletefood', {
-            food_id: id
-        }).then((response) => {
-            console.log(response.data);
-            if (response.data.acknowledged) {
-                navigate('/');
-                toast.success(`Successfully Deleted`, {
-                    position: 'bottom-center',
-                    autoClose: 2000,
-                });
-            }
-        }).catch((error) => {
-            console.log(error);
-        });
+        // const id = data[rowItem]['_id'];
+        console.log(rowItem);
+
+        // instance.post('/deletefood', {
+        //     food_id: id
+        // }).then((response) => {
+        //     console.log(response.data);
+        //     if (response.data.acknowledged) {
+        //         navigate('/');
+        //         toast.success(`Successfully Deleted`, {
+        //             position: 'bottom-center',
+        //             autoClose: 2000,
+        //         });
+        //     }
+        // }).catch((error) => {
+        //     console.log(error);
+        // });
     };
 
     const handleUpdateFood = () => {
         setUpdateModal(false);
-        navigate(`/updatefood/${data[rowItem]['_id']}`);
+        console.log(data[rowItem]['_id']);
+
+        // navigate(`/updatefood/${data[rowItem]['_id']}`);
     };
 
 
