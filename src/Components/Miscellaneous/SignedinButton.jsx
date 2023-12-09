@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider'
 import { PiSignInFill, PiSignOutFill } from 'react-icons/pi'
-import { Avatar, Dropdown } from 'flowbite-react';
+import { Avatar, Button, Dropdown } from 'flowbite-react';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 
@@ -21,6 +21,8 @@ function SignedinButton() {
         <div className='overflow-hidden'>
             {
                 userLoading ?
+    
+                
                     <Dropdown label='Join Us' placement='bottom'>
                         <Dropdown.Item icon={PiSignInFill} onClick={() => { handleSignIn() }}> Sign In</Dropdown.Item>
                     </Dropdown> :

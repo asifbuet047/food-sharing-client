@@ -1,8 +1,15 @@
-# React + Vite
+# Project name: Community Food Sharing
+## Theme: Anyone can share food and remove hunger from society
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+### Main feactures:
+1. Anyone in a communitu canshare his/her leftover meal
+2. One can sign in anytime and become a doner
+3. One can register with Google
+4. Admin can see all donation by all donars
+5. Any valid user can access food
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+[Live link ](https://assignment-11-community-foods.web.app/)

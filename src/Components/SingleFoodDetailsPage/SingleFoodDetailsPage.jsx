@@ -6,6 +6,7 @@ import { Avatar, Button, Checkbox, Label, Modal, TextInput } from 'flowbite-reac
 import { convertDate, getCurrentDate } from '../../Utilities/Utilities';
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
 import { toast } from 'react-toastify';
+import { Helmet } from 'react-helmet';
 
 function SingleFoodDetailsPage() {
     const { user, signOutUser } = useContext(AuthenticationContext);
@@ -83,6 +84,9 @@ function SingleFoodDetailsPage() {
 
     return (
         <div>
+            <Helmet>
+                <title>Community Food Sharing|Food Details</title>
+            </Helmet>
             {
                 food ?
                     <div className='w-full flex flex-col justify-center items-center'>

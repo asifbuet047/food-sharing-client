@@ -7,6 +7,7 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import { convertDateToEpoch } from '../../Utilities/Utilities';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 function AddFoodPage() {
     const { user, signOutUser } = useContext(AuthenticationContext);
@@ -46,6 +47,7 @@ function AddFoodPage() {
                     position: 'bottom-center',
                     autoClose: 2000,
                 });
+                navigate('/');
             }
         }).catch((error) => {
             if (error.response.status == 401 || error.response.status == 403) {
@@ -62,6 +64,9 @@ function AddFoodPage() {
 
     return (
         <div>
+            <Helmet>
+                <title>Community Food Sharing|Add Food</title>
+            </Helmet>
             {
                 user ?
                     <div>

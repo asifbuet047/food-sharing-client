@@ -1,31 +1,45 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { convertDate } from '../../Utilities/Utilities';
-import HorizontalBarLoading from '../Loading/HorizontalBarLoading';
-import ThreeCircleLoading from '../Loading/BeatLoading';
 import { Button } from 'flowbite-react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
+import NoFoodPage from '../Miscellaneous/NoFoodPage';
 
 function MyFoodRequestCard({ data }) {
     const { user, signOutUser } = useContext(AuthenticationContext);
     const [food, setFood] = useState(null);
+    const [noFood, setNoFood] = useState(false);
     const instance = useAxiosSecure();
     const navigate = useNavigate();
 
     useEffect(() => {
         instance.get(`/food/${data.food_id}`).then((response) => {
-            setFood(response.data);
+            if (!response.data) {
+                setNoFood(true);
+                instance.delete(`/deleterequest/${data._id}`).then((response) => {
+                    if (response.data) {
+                        toast.success(`One of Your Request Food is deleted by its Donator. We remove it from Your chart`, {
+                            position: 'bottom-center',
+                            autoClose: 5000,
+                        });
+                    }
+                }).catch((error) => { });
+
+            } else {
+                setFood(response.data);
+            }
         }).catch((error) => {
-            console.log(error);
+            toast.error(`Something wrong ${error}`, {
+                position: 'bottom-center',
+                autoClose: 2000,
+            });
         });
     }, []);
 
     const handleCancelRequest = () => {
-        console.log(data._id);
         instance.delete(`/deleterequest/${data._id}`).then((response) => {
-            console.log(response.data);
             instance.post(`/foodStatusUpdate/${data._id}`, {
                 food_status: true
             }).then((response) => {
@@ -72,7 +86,7 @@ function MyFoodRequestCard({ data }) {
                         <h2>Status: {food?.food_status ? 'Available' : 'Delivered'}</h2>
                         <Button onClick={handleCancelRequest}>Cancel Request</Button>
                     </div>
-                    : <ThreeCircleLoading circleSize={'5em'}></ThreeCircleLoading>
+                    : <NoFoodPage></NoFoodPage>
             }
         </div>
     )

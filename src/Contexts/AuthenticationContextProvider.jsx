@@ -17,7 +17,12 @@ function AuthenticationContextProvider({ children }) {
     }
 
     const changeExitingUsersNameAndPhotoURL = (name, photoURL) => {
-        return updateProfile(user, { displayName: name, photoURL: photoURL });
+        if (auth.currentUser) {
+            let v = auth.currentUser;
+            return updateProfile(v, { displayName: name, photoURL: photoURL });
+        } else {
+            return null;
+        }
     }
 
     const changeExitingUsersEmail = (email) => {

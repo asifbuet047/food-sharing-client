@@ -5,11 +5,14 @@ import AvailableFoodsContainer from './AvailableFoodsContainer/AvailableFoodsCon
 import { Button, Pagination } from 'flowbite-react';
 import ThreeCircleLoading from '../Loading/BeatLoading';
 import { FaSearch } from 'react-icons/fa';
+import NoFoodPage from '../Miscellaneous/NoFoodPage'
+import { Helmet } from 'react-helmet';
 
 function AvailableFoods() {
     const instance = useAxios();
     const queryClient = useQueryClient();
     const [currentPage, setCurrentPage] = useState(1);
+    const [sortType, setSortType] = useState('quantity');
     const searchField = useRef(null);
     const [search, setSearch] = useState(null);
 
@@ -18,9 +21,9 @@ function AvailableFoods() {
     };
 
     const { isPending, error, data, isFetching, isSuccess } = useQuery({
-        queryKey: ['available_foods', currentPage],
+        queryKey: ['available_foods', currentPage, sortType],
         queryFn: async () => {
-            const res = await instance.get(`/availablefoods?page=${currentPage}&limit=10`);
+            const res = await instance.get(`/availablefoods?page=${currentPage}&limit=10&sort=${sortType}`);
             return res.data;
         },
         placeholderData: keepPreviousData,
@@ -30,44 +33,53 @@ function AvailableFoods() {
     const handleSearch = async () => {
         const searchValue = searchField.current.value;
         const res = await instance.get(`/seachfood?name=${searchValue}`);
-        console.log(res.data);
         setSearch(res.data);
     };
 
     const handleSorting = () => {
-        console.log("Sort");
+        setSearch(null);
+        setSortType('expire');
     };
 
 
     return (
 
         <div>
+            <Helmet>
+                <title>Community Food Sharing|Available Foods</title>
+            </Helmet>
             {
                 search ?
                     <div>
                         <div className='flex flex-row justify-center'>
                             <h1 className='text-xl md:text-2xl lg:text-3xl font-bold text-black'>Search result</h1>
                         </div>
-                        <div className='flex flex-row justify-evenly'>
-                            <input ref={searchField} type="text" placeholder="Search by Food name" className="input input-bordered input-primary w-full max-w-xs" />
-                            <FaSearch size='3em' onClick={handleSearch}></FaSearch>
-                            <Button pill onClick={handleSorting}><span>Sort by Expire Date</span></Button>
+                        <div className='flex flex-col md:flex-row justify-evenly items-center rounded-lg border-2 border-green-600'>
+                            <input ref={searchField} type="text" placeholder="Search by Food name" className="input input-bordered input-primary w-full max-w-xs m-2" />
+                            <FaSearch size='3em' onClick={handleSearch} className='m-2'></FaSearch>
+                            <Button pill onClick={handleSorting} className='m-2'><span>Sort by Expire Date</span></Button>
                         </div>
-                        <div>
-                            <AvailableFoodsContainer data={search}></AvailableFoodsContainer>
-                        </div>
+                        {
+                            search.length > 0 ?
+                                <div className='rounded-lg mt-5 mb-5 '>
+                                    <AvailableFoodsContainer data={search}></AvailableFoodsContainer>
+                                </div>
+                                : <NoFoodPage></NoFoodPage>
+
+                        }
+
                     </div>
                     :
                     <div>
                         <div className='flex flex-row justify-center'>
-                            <h1 className='text-xl md:text-2xl lg:text-3xl font-bold text-black'>All Available Foods</h1>
+                            <h1 className='text-2xl md:text-3xl lg:text-5xl font-bold text-black'>All Available Foods</h1>
                         </div>
-                        <div className='flex flex-row justify-evenly'>
-                            <input ref={searchField} type="text" placeholder="Search by Food name" className="input input-bordered input-primary w-full max-w-xs" />
-                            <FaSearch size='3em' onClick={handleSearch}></FaSearch>
-                            <Button pill onClick={handleSorting}><span>Sort by Expire Date</span></Button>
+                        <div className='flex flex-col md:flex-row justify-evenly items-center rounded-lg border-2 border-green-600'>
+                            <input ref={searchField} type="text" placeholder="Search by Food name" className="m-2 input input-bordered input-primary w-full max-w-xs" />
+                            <FaSearch size='3em' onClick={handleSearch} className='m-2'></FaSearch>
+                            <Button pill onClick={handleSorting} className='m-2'><span>Sort by Expire Date</span></Button>
                         </div>
-                        <div className='border-2 rounded-lg border-green-600 mt-5 mb-5'>
+                        <div className='rounded-lg mt-5 mb-5'>
                             {
                                 isSuccess ?
                                     <AvailableFoodsContainer data={data.available_foods}></AvailableFoodsContainer>

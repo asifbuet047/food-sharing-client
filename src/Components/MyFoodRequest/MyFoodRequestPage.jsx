@@ -4,19 +4,21 @@ import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvi
 import { toast } from 'react-toastify';
 import ThreeCircleLoading from '../Loading/BeatLoading';
 import MyFoodRequestCard from './MyFoodRequestCard';
+import NoFoodPage from '../Miscellaneous/NoFoodPage';
+import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
 
 function MyFoodRequestPage() {
-    const { user } = useContext(AuthenticationContext);
+    const { user, signOutUser } = useContext(AuthenticationContext);
     const instance = useAxiosSecure();
+    const navigate = useNavigate();
     const [foods, setFoods] = useState(null);
 
 
     useEffect(() => {
         instance.get(`/myfoodrequest?email=${user?.email}`).then((response) => {
-            console.log(response.data);
             setFoods(response.data);
         }).catch((error) => {
-            console.log(error);
             if (error.response.status == 401 || error.response.status == 403) {
                 signOutUser();
                 toast.error(`Invalidate User Please sign in again`, {
@@ -29,15 +31,27 @@ function MyFoodRequestPage() {
     }, []);
     return (
         <div>
+            <Helmet>
+                <title>Community Food Sharing|My Food Request</title>
+            </Helmet>
             {
                 foods ?
-                    <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-5'>
+                    <div>
                         {
                             foods.length > 0 ?
-                                foods.map((food, index) => <MyFoodRequestCard data={food} key={index}></MyFoodRequestCard>)
+                                <div>
+                                    <div className='flex flex-row justify-center'>
+                                        <h1 className='text-black font-bold text-base md:text-xl lg:text-3xl'>Your All Food Requests</h1>
+                                    </div>
+                                    <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-5'>
+                                        {
+                                            foods.map((food, index) => <MyFoodRequestCard data={food} key={index}></MyFoodRequestCard>)
+                                        }
+                                    </div>
+                                </div>
                                 :
                                 <div className='flex flex-col justify-center items-center'>
-                                    <h1 className='text-black font-bold text-base md:text-xl lg:text-3xl'>You dont requst any food yet</h1>
+                                    <h1 className='text-black font-bold text-base md:text-xl lg:text-3xl'>You dont request any food yet</h1>
                                     <NoFoodPage></NoFoodPage>
                                 </div>
                         }

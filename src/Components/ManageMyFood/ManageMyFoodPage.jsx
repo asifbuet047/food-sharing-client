@@ -8,19 +8,20 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import { useNavigate } from 'react-router-dom';
 import NoFoodPage from '../Miscellaneous/NoFoodPage';
 import HorizontalBarLoading from '../Loading/HorizontalBarLoading';
+import { convertDate } from '../../Utilities/Utilities';
+import { Helmet } from 'react-helmet';
 
 
 function ManageMyFoodPage() {
 
     const { user } = useContext(AuthenticationContext);
-    const [foods, setFoods] = useState([]);
+    const [foods, setFoods] = useState(null);
     const instance = useAxiosSecure();
     const navigate = useNavigate();
     const [deleteModal, setDeleteModal] = useState(false);
     const [updateModal, setUpdateModal] = useState(false);
     const [fetching, setFetching] = useState(true);
-    let rowItem = 0;
-    let colItem = 0;
+    const [row, setRow] = useState(0);
 
     useEffect(() => {
         instance.get(`/myfoods/${user?.email}`).then((response) => {
@@ -31,47 +32,47 @@ function ManageMyFoodPage() {
         });
     }, []);
 
-    const handleClick = (row, col) => {
-        rowItem = row;
-        colItem = col;
-        console.log(rowItem);
-        if (col == 5) {
+    const handleClick = (r, c) => {
+        if (c == 5) {
+            setRow(r);
             setDeleteModal(true);
         }
-        if (col == 6) {
+        if (c == 6) {
+            setRow(r);
             setUpdateModal(true);
         }
-        if (col == 7) {
-            navigate(`/manage/${foods[row]._id}`);
+        if (c == 7) {
+            navigate(`/manage/${foods[r]._id}`);
         }
     };
 
     const handleDeleteFood = () => {
         setDeleteModal(false);
-        // const id = data[rowItem]['_id'];
-        console.log(rowItem);
-
-        // instance.post('/deletefood', {
-        //     food_id: id
-        // }).then((response) => {
-        //     console.log(response.data);
-        //     if (response.data.acknowledged) {
-        //         navigate('/');
-        //         toast.success(`Successfully Deleted`, {
-        //             position: 'bottom-center',
-        //             autoClose: 2000,
-        //         });
-        //     }
-        // }).catch((error) => {
-        //     console.log(error);
-        // });
+        const id = data[row]['_id'];
+        console.log(id);
+        instance.post('/deletefood', {
+            food_id: id
+        }).then((response) => {
+            console.log(response.data);
+            if (response.data.acknowledged) {
+                navigate('/managefoods');
+                toast.success(`Successfully Deleted`, {
+                    position: 'bottom-center',
+                    autoClose: 2000,
+                });
+            }
+        }).catch((error) => {
+            navigate('/managefoods');
+            toast.success(`Something wrong ${error}`, {
+                position: 'bottom-right',
+                autoClose: 5000,
+            });
+        });
     };
 
     const handleUpdateFood = () => {
         setUpdateModal(false);
-        console.log(data[rowItem]['_id']);
-
-        // navigate(`/updatefood/${data[rowItem]['_id']}`);
+        navigate(`/updatefood/${data[row]['_id']}`);
     };
 
 
@@ -85,14 +86,17 @@ function ManageMyFoodPage() {
             } else {
                 status = "Delivered";
             }
-            const data = { _id, food_name, food_quantity, expiry_date, status, delete: `Delete`, update: `Update`, manage: `Manage` };
-            return data;
+            const date = convertDate(expiry_date);
+            const d = { _id, food_name, food_quantity, date, status, delete: `Delete`, update: `Update`, manage: `Manage` };
+            return d;
         });
     }
+
+
     const columns = useMemo(
         () => [
             {
-                Header: 'Food id',
+                Header: 'Food No',
                 accessor: '_id',
             },
             {
@@ -101,7 +105,7 @@ function ManageMyFoodPage() {
             },
             {
                 Header: 'Expiry Date',
-                accessor: 'expiry_date',
+                accessor: 'date',
             },
             {
                 Header: 'Quantity',
@@ -130,11 +134,26 @@ function ManageMyFoodPage() {
 
     return (
         <div className='w-full'>
+            <Helmet>
+                <title>Community Food Sharing|Manage My Foods</title>
+            </Helmet>
             <div className='flex flex-row justify-center'>
                 {
-                    foods.length > 0 ?
-                        <h1 className='text-black text-xl md:text-2xl font-bold'>Your Added Foods</h1>
-                        : <h1 className='text-black text-xl md:text-2xl font-bold'>Your Added Foods is Empty</h1>
+                    foods ?
+                        <div className='flex flex-row justify-center items-center'>
+                            {
+                                foods.length > 0 ?
+                                    <h1 className='text-black text-xl md:text-2xl font-bold text-center'>Your Added Foods</h1>
+                                    :
+                                    <div>
+                                        <h1 className='text-black text-xl md:text-2xl font-bold text-center'>You dont Add any Foods</h1>
+                                        <NoFoodPage></NoFoodPage>
+                                    </div>
+
+                            }
+                        </div>
+                        :
+                        <h1 className='text-black text-xl md:text-2xl font-bold'>Your Added Foods is fetching</h1>
                 }
             </div>
             <div>
@@ -145,8 +164,8 @@ function ManageMyFoodPage() {
                         <div>
                             {
                                 foods.length > 0 ?
-                                    <table {...getTableProps()} className='w-full'>
-                                        <thead>
+                                    <table {...getTableProps()} className='w-screen'>
+                                        <thead className='w-full'>
                                             {
                                                 headerGroups.map((headerGroup) => (
                                                     <tr {...headerGroup.getHeaderGroupProps()}>
@@ -157,29 +176,38 @@ function ManageMyFoodPage() {
                                                 ))
                                             }
                                         </thead>
-                                        <tbody {...getTableBodyProps()}>
+                                        <tbody {...getTableBodyProps()} className='w-full'>
                                             {
                                                 rows.map((row, rowIndex) => {
                                                     prepareRow(row);
                                                     return (
-                                                        <tr {...row.getRowProps()} className='border-2 border-green-500'>
+                                                        <tr {...row.getRowProps()} className='max-w-full border-4 border-green-500'>
                                                             {
                                                                 row.cells.map((cell, colIndex) => {
                                                                     return (
-                                                                        <td {...cell.getCellProps()}>
+                                                                        <td {...cell.getCellProps()} className='border-2 border-green-500'>
                                                                             {
-                                                                                colIndex == 5 || colIndex == 6 || colIndex == 7 ?
-                                                                                    <Button onClick={() => { handleClick(rowIndex, colIndex) }}>{cell.render('Cell')}</Button>
-                                                                                    :
-                                                                                    <span>
-                                                                                        {
-                                                                                            colIndex == 4 ?
-                                                                                                <span className='text-black font-bold text-center text-xs md:text-base lg:text-lg' onClick={() => { handleClick(rowIndex, colIndex) }}>{cell.render('Cell')}</span>
-                                                                                                : <span className='text-black font-bold text-center text-xs md:text-base lg:text-lg' onClick={() => { handleClick(rowIndex, colIndex) }}>{cell.render('Cell')}</span>
-                                                                                        }
-                                                                                    </span>
 
+                                                                                colIndex == 5 || colIndex == 6 || colIndex == 7 ?
+                                                                                    <div className='flex flex-row justify-center items-center'>
+                                                                                        <Button onClick={() => { handleClick(rowIndex, colIndex) }}>{cell.render('Cell')}</Button>
+                                                                                    </div>
+                                                                                    :
+                                                                                    <div>
+                                                                                        {
+                                                                                            colIndex == 0 ?
+                                                                                                <div className='flex flex-row justify-center items-center'>
+                                                                                                    <span className='text-black font-bold text-center text-xs md:text-base lg:text-lg w-fit'>{rowIndex + 1}</span>
+                                                                                                </div>
+                                                                                                :
+                                                                                                <div className='flex flex-row justify-center items-center'>
+                                                                                                    <span className='text-black font-bold text-center text-xs md:text-base lg:text-lg w-fit'>{cell.render('Cell')}</span>
+                                                                                                </div>
+
+                                                                                        }
+                                                                                    </div>
                                                                             }
+
                                                                         </td>
                                                                     );
                                                                 })
@@ -228,7 +256,7 @@ function ManageMyFoodPage() {
                                             </Modal.Body>
                                         </Modal>
                                     </table>
-                                    : <NoFoodPage></NoFoodPage>
+                                    : <span></span>
                             }
                         </div>
 

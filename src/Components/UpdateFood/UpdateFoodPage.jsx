@@ -6,12 +6,15 @@ import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvi
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import ThreeCircleLoading from '../Loading/BeatLoading';
-import { convertDate } from '../../Utilities/Utilities';
+import { convertDate, convertDateToEpoch } from '../../Utilities/Utilities';
 import { toast } from 'react-toastify';
+import { Avatar, Button } from 'flowbite-react';
+import { Helmet } from 'react-helmet';
 
 function UpdateFoodPage() {
     const { user } = useContext(AuthenticationContext);
     const [food, setFood] = useState(null);
+    const [update, setUpdate] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const instance = useAxiosSecure();
@@ -20,13 +23,18 @@ function UpdateFoodPage() {
     useEffect(() => {
         instance.get(`/food/${id}`).then((response) => {
             console.log(response.data);
+            setFood(response.data);
         }).catch((error) => {
-            console.log(error);
+            toast.error(`Something wrong ${error}`, {
+                position: 'bottom-right',
+                autoClose: 3000,
+            });
         });
     }, []);
 
     const handleFoodUpdate = (event) => {
         event.preventDefault();
+        setUpdate(true);
         const formData = new FormData(event.target);
         const name = formData.get('name');
         const image = formData.get('image');
@@ -44,6 +52,8 @@ function UpdateFoodPage() {
             status = false;
         }
 
+        const epoch = convertDateToEpoch(expire);
+
         const updateFood = {
             food_name: name,
             food_image: image,
@@ -52,14 +62,14 @@ function UpdateFoodPage() {
             donator_email: donatorMail,
             food_quantity: quantity,
             pickup_location: location,
-            expiry_date: convertDateToEpoch(expire),
+            expiry_date: epoch,
             food_status: status
         };
         console.log(updateFood);
         instance.patch(`/updatefood/${id}`, updateFood).then((response) => {
             if (response.data.acknowledged) {
-                setFood(response.data);
-                toast.success(`Successfully Add ${name} Food`, {
+                setUpdate(false);
+                toast.success(`Successfully Update ${name} Food`, {
                     position: 'bottom-center',
                     autoClose: 2000,
                 });
@@ -78,6 +88,9 @@ function UpdateFoodPage() {
 
     return (
         <div>
+            <Helmet>
+                <title>Community Food Sharing|Update Food</title>
+            </Helmet>
             {
                 user ?
                     <div>
@@ -113,8 +126,8 @@ function UpdateFoodPage() {
                                         <input name='status' type="text" placeholder="Available|Delivered" className="input input-bordered w-full max-w-xs m-2" />
 
                                         {
-                                            update ? <Button size='xl' outline type='submit' isProcessing>Adding Food</Button>
-                                                : <Button size='xl' outline type='submit'> Add Food</Button>
+                                            update ? <Button size='xl' outline type='submit' isProcessing>Updating Food</Button>
+                                                : <Button size='xl' outline type='submit'>Update Food</Button>
                                         }
 
                                     </form>

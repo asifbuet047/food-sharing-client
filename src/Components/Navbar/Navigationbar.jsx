@@ -1,19 +1,40 @@
 import React, { useContext } from 'react'
-import { Navbar } from 'flowbite-react'
+import { Button, Navbar } from 'flowbite-react'
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider'
-import SignedinButton from '../Miscellaneous/SignedinButton';
 import { FaPeopleRoof } from 'react-icons/fa6'
 import { getProjectName } from '../../Utilities/Utilities';
 import { Avatar } from 'flowbite-react';
 import { Dropdown } from 'flowbite-react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Navigationbar() {
-  const { userLoading, user } = useContext(AuthenticationContext);
+  const { user, signOutUser, userLoading } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
+
+
+  const handleLogin = () => {
+    navigate('/signin');
+    toast.success(`User Successfully Logged In. Welcome`, {
+      position: 'bottom-center',
+      autoClose: 2000,
+    });
+  }
+
+  const handleLogout = () => {
+    signOutUser();
+    navigate('/signin');
+    toast.success(`User Successfully Logged Out. Login to donate`, {
+      position: 'bottom-center',
+      autoClose: 2000,
+    });
+  }
+
   return (
     <Navbar fluid rounded className='w-full'>
       <Navbar.Brand href="/">
         <FaPeopleRoof size={'3em'}></FaPeopleRoof>
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Community Foods</span>
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">{getProjectName()}</span>
       </Navbar.Brand>
       <div className="flex md:order-2">
         <Dropdown
@@ -24,13 +45,35 @@ function Navigationbar() {
           }
         >
           <Dropdown.Header>
-            <span className="block text-sm">{user?.user?.email}</span>
-            <span className="block truncate text-sm font-medium">{user?.user?.email}</span>
+            {
+              user ?
+                <div>
+                  {
+                    user?.displayName ?
+                      <div className='flex flex-col justify-center items-center'>
+                        <span className="block truncate text-sm font-medium mb-2 mt-2">{user.displayName}</span>
+                        <Button onClick={handleLogout}>Log Out</Button>
+                      </div>
+
+                      :
+                      <div className='flex flex-col justify-center items-center'>
+                        <span className="block text-sm mb-2 mt-2">{user.email}</span>
+                        <Button onClick={handleLogout}>Log Out</Button>
+                      </div>
+                  }
+
+                </div>
+                :
+                <div className='flex flex-col justify-center items-center'>
+                  <span className='mb-2 mt-2'>No user logged in</span>
+                  <Button onClick={handleLogin}>Log In</Button>
+                </div>
+
+            }
+
           </Dropdown.Header>
-          <Dropdown.Item>Dashboard</Dropdown.Item>
-          <Dropdown.Item>Settings</Dropdown.Item>
           <Dropdown.Divider />
-          <SignedinButton></SignedinButton>
+
         </Dropdown>
       </div>
       <Navbar.Toggle />

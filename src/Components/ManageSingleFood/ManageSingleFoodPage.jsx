@@ -5,6 +5,7 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { useLocation } from 'react-router-dom';
 import ManageSingleFoodCard from './ManageSingleFoodCard';
 import NoFoodPage from '../Miscellaneous/NoFoodPage';
+import { Helmet } from 'react-helmet';
 
 function ManageSingleFoodPage() {
     const [requestFoods, setRequestFoods] = useState(null);
@@ -29,12 +30,19 @@ function ManageSingleFoodPage() {
 
     return (
         <div>
+            <Helmet>
+                <title>Community Food Sharing|Manage Single Food</title>
+            </Helmet>
             {
                 requestFoods ?
-                    <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-5'>
+                    <div>
                         {
                             requestFoods.length > 0 ?
-                                requestFoods.map((food, index) => <ManageSingleFoodCard data={food} key={index}></ManageSingleFoodCard>)
+                                <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-5'>
+                                    {
+                                        requestFoods.map((food, index) => <ManageSingleFoodCard data={food} key={index}></ManageSingleFoodCard>)
+                                    }
+                                </div>
                                 :
                                 <div className='flex flex-col justify-center items-center'>
                                     <h1 className='text-black font-bold text-base md:text-xl lg:text-3xl'>No One request this food yet</h1>

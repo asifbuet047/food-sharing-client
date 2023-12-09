@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
 import ThreeCircleLoading from '../Loading/BeatLoading';
+import { Helmet } from 'react-helmet';
+import { Player } from '@lottiefiles/react-lottie-player'
 
 
 function SignInPage() {
@@ -57,9 +59,15 @@ function SignInPage() {
 
 
   return (
-    <div>
+    <div className='flex flex-col md:flex-row justify-center items-center gap-5 m-5'>
+      <Helmet>
+        <title>Community Food Sharing|Signin</title>
+      </Helmet>
+      <div className='md:w-1/2'>
+        <Player autoplay loop src={'/assets/signin.json'} style={{ height: '300px', width: '300px' }}></Player>
+      </div>
       {userLoading ?
-        <div className="hero min-h-screen bg-base-200">
+        <div className="hero min-h-full md:w-1/2">
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <form className="card-body" onSubmit={handleSignIn}>
               <div className="form-control">
